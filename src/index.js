@@ -1,13 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
+import 'antd/dist/antd.css';
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import store from './state';
+import { HomePage } from './pages/home';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router>
+      <Switch>
+        <div className='app'>
+          <Route path="/" exact={true}>
+            <HomePage />
+          </Route>
+        </div>
+      </Switch>
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
 
