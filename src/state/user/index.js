@@ -1,4 +1,4 @@
-const { createSlice } = require("@reduxjs/toolkit");
+import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'user',
@@ -6,10 +6,11 @@ const userSlice = createSlice({
     data: [],
     pagination: {
       limit: 10,
-      offset: 0,
+      page: 0,
     },
-    watchedIndex: 0,
-    totalIndex: 0,
+    currentUser: null,
+    watchedIndex: -1,
+    totalUsersFetched: 0,
     isLoading: false,
   },
   reducers: {
@@ -27,8 +28,12 @@ const userSlice = createSlice({
     updateLoading: (state, action) => {
       state.isLoading = action.payload.isLoading;
     },
-    advanceNextUser: state => {
+    updateTotalUsersFetched: (state, action) => {
+      state.totalUsersFetched += action.payload.skippedUsersCount;
+    },
+    advanceNextUser: (state, action) => {
       state.watchedIndex++;
+      state.currentUser = action.payload.currentUser;
     },
   },
 });
