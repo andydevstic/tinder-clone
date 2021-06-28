@@ -3,22 +3,25 @@ import './home.scss';
 import { useEffect } from 'react';
 
 import { HeartOutlined, CloseOutlined } from '@ant-design/icons';
-import { useUserIndexes, useUsersSelector } from '../../state/user/selectors';
+import { useCurrentUser, useUsers } from '../../state/user/selectors';
 import { useAppDispatch } from '../../state';
-import { advanceNextUserThunk } from '../../state/user/thunks';
+import { advanceNextUser } from '../../state/user/thunks';
 import { LoadingOutlined } from '@ant-design/icons';
+import { getUserAge } from '../../shared/utils';
+import { USER_PREFERENCE_TYPES } from '../../shared/constants';
+
 
 export const HomePage = () => {
-  const userData = useUsersSelector();
-  const { watchedIndex } = useUserIndexes();
   const dispatch = useAppDispatch();
-  const { data, isLoading } = userData;
 
-  const currentUser = data[watchedIndex];
+  const { isLoading, data } = useUsers();
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
-    dispatch(advanceNextUserThunk());
-  }, [dispatch]);
+    if (!data || !data.length) {
+      dispatch(advanceNextUser());
+    }
+  }, [data, dispatch]);
 
   return (
     (!isLoading && currentUser)
@@ -31,16 +34,31 @@ export const HomePage = () => {
               <img src={currentUser.picture} />
             </div>
             <div className='home-page__container__user-info'>
-              <h3>{currentUser.firstName} {currentUser.lastName}</h3>
-              <h3>{currentUser.dateOfBirth}</h3>
+              <h2>{currentUser.firstName} {currentUser.lastName}, {getUserAge(currentUser.dateOfBirth)}</h2>
             </div>
 
             <div className='home-page__container__action-btns'>
-              <div className='home-page__container__action-btns__pass'>
+              <div // Should not use arrow fn here for best performance, but just use it for now.
+                className='home-page__container__action-btns__pass'
+                onClick={
+                  () => dispatch(advanceNextUser({
+                    preferenceType: USER_PREFERENCE_TYPES.PASS,
+                    userId: currentUser.id,
+                  }))
+                }
+              >
                 <CloseOutlined style={{fontSize: '30px'}} />
               </div>
 
-              <div className='home-page__container__action-btns__like'>
+              <div
+                className='home-page__container__action-btns__like'
+                onClick={
+                  () => dispatch(advanceNextUser({
+                    preferenceType: USER_PREFERENCE_TYPES.LIKE,
+                    userId: currentUser.id,
+                  }))
+                }
+              >
                 <HeartOutlined style={{fontSize: '30px'}} />
               </div>
             </div>

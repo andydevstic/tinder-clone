@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-export const useUsersSelector = () => {
+export const useUsers = () => {
   const userState = useSelector(state => state.user);
 
   return {
@@ -9,13 +9,10 @@ export const useUsersSelector = () => {
   };
 }
 
-export const useUserIndexes = () => {
-  const userState = useSelector(state => state.user);
-  const watchedIndex = userState.watchedIndex;
-  const totalIndex = userState.totalIndex;
+export const useCurrentUser = () => {
+  return useSelector(state => state.user.currentUser);
+  // const { watchedIndex, totalUsersFetched } = userState;
+  // const currentUserIndex = watchedIndex - totalUsersFetched;
 
-  return {
-    watchedIndex,
-    totalIndex,
-  }
+  // return userState.data[currentUserIndex];
 }
