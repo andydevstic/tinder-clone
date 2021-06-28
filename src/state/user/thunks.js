@@ -1,5 +1,5 @@
 import { userActions } from '.';
-import { fetchUsersGateway } from '../../gateways/user';
+import { fetchUsersGateway, userPreferenceUpdateGateway } from '../../gateways/user';
 import { MAX_USER_CACHE, USER_PREFETCH_LIMIT } from '../../shared/constants';
 
 function shouldFetchNewUsers(userState) {
@@ -10,10 +10,14 @@ function shouldFetchNewUsers(userState) {
   return fetchedDataLength - watchedIndex <= USER_PREFETCH_LIMIT;
 }
 
-export const advanceNextUserThunk = () => async (dispatch, getState) => {
+export const advanceNextUserThunk = (userPreferenceData) => async (dispatch, getState) => {
   const appState = getState();
   const userState = appState.user;
   const currentUsers = userState.data;
+
+  if (userPreferenceData) {
+    await userPreferenceUpdateGateway(userPreferenceData);
+  }
 
   if (!shouldFetchNewUsers(userState)) {
     dispatch(userActions.advanceNextUser());

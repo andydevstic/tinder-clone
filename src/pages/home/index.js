@@ -7,6 +7,7 @@ import { useUserIndexes, useUsersSelector } from '../../state/user/selectors';
 import { useAppDispatch } from '../../state';
 import { advanceNextUserThunk } from '../../state/user/thunks';
 import { LoadingOutlined } from '@ant-design/icons';
+import { USER_PREFERENCE_TYPES } from '../../shared/constants';
 
 export const HomePage = () => {
   const userData = useUsersSelector();
@@ -36,11 +37,27 @@ export const HomePage = () => {
             </div>
 
             <div className='home-page__container__action-btns'>
-              <div className='home-page__container__action-btns__pass'>
+              <div // Should not use arrow fn here for best performance, but just use it for now.
+                className='home-page__container__action-btns__pass'
+                onClick={
+                  () => dispatch(advanceNextUserThunk({
+                    preferenceType: USER_PREFERENCE_TYPES.LIKE,
+                    userId: currentUser.id,
+                  }))
+                }
+              >
                 <CloseOutlined style={{fontSize: '30px'}} />
               </div>
 
-              <div className='home-page__container__action-btns__like'>
+              <div
+                className='home-page__container__action-btns__like'
+                onClick={
+                  () => dispatch(advanceNextUserThunk({
+                    preferenceType: USER_PREFERENCE_TYPES.PASS,
+                    userId: currentUser.id,
+                  }))
+                }
+              >
                 <HeartOutlined style={{fontSize: '30px'}} />
               </div>
             </div>
