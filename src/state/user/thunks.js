@@ -1,7 +1,7 @@
-import { message } from 'antd';
 import { userActions } from '.';
 import { fetchUsersGateway, userPreferenceUpdateGateway, fetchUserByIdGateway } from '../../gateways/user';
 import { MAX_USER_CACHE, RESET_USER_CACHE, USER_PREFERENCE_TYPES, USER_PREFETCH_LIMIT } from '../../shared/constants';
+import { openErrorMessage, openSuccessMessage } from '../../shared/message';
 import { openAlertNoti } from '../../shared/notification';
 
 function shouldFetchNewUsers(userState) {
@@ -18,7 +18,7 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
     let userState = appState.user;
 
     if (userState.isLoading) {
-      message.error('You are swipping too fast!');
+      openErrorMessage('You are swipping too fast!');
   
       return;
     }
@@ -30,10 +30,10 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
 
       switch (userPreferenceData.preferenceType) {
         case USER_PREFERENCE_TYPES.LIKE:
-          message.success('What an awesome profile!');
+          openSuccessMessage('What an awesome profile!');
           break;
         case USER_PREFERENCE_TYPES.PASS:
-          message.error('Not my type');
+          openErrorMessage('Not my type');
           break;
         default:
           throw new Error('User preference type not defined');
@@ -61,6 +61,7 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
 
     dispatch(userActions.advanceNextUser({ currentUser: currentUserDetail }));
 
+    // Fetch next page in background
     if (shouldFetchNewUsers(userState) && page > 0) {
       fetchNextUserPage({ limit, page })(dispatch, getState);
     }
