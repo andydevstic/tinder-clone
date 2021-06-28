@@ -17,8 +17,6 @@ const userSlice = createSlice({
     fetchUsers: (state, action) => {
       const { data, pagination } = action.payload;
 
-      console.log('Fetch users called', action.payload);
-
       if (data) {
         state.data = data;
       }
@@ -31,7 +29,6 @@ const userSlice = createSlice({
       state.isLoading = action.payload.isLoading;
     },
     updateTotalUsersFetched: (state, action) => {
-      console.log('Update watched index called', action.payload);
       state.totalUsersFetched += action.payload.skippedUsersCount;
     },
     advanceNextUser: (state, action) => {

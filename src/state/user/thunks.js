@@ -17,7 +17,13 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
     let appState = getState();
     let userState = appState.user;
 
-    // dispatch(userActions.updateLoading({ isLoading: true }));
+    if (userState.isLoading) {
+      message.error('You are swipping too fast!');
+  
+      return;
+    }
+
+    const { page, limit } = userState.pagination;
 
     if (userPreferenceData) {
       await userPreferenceUpdateGateway(userPreferenceData);
@@ -34,38 +40,35 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
       }
     }
 
-    if (shouldFetchNewUsers(userState)) {
-      const { page, limit } = userState.pagination;
+    if (shouldFetchNewUsers(userState) && page === 0) {
+      // Since it's first page, we'll wait
+      await fetchNextUserPage({ limit, page })(dispatch, getState);
 
-      if (page > 0) {
-        // It's not first page so don't wait.
-        fetchNextUserPage({ limit, page })(dispatch, getState);
-      } else {
-        // Since it's first page, we'll wait
-        await fetchNextUserPage({ limit, page })(dispatch, getState);
-    
-        appState = getState();
-        userState = appState.user;
-      }
+      appState = getState();
+      userState = appState.user;
     }
 
-    const nextWatchedIndex = userState.watchedIndex - userState.totalUsersFetched + 1;
+    const currentUserIndex = userState.watchedIndex - userState.totalUsersFetched + 1;
+    const currentUser = userState.data[currentUserIndex];
 
-    const nextUser = userState.data[nextWatchedIndex];
-
-    if (!nextUser) {
-      throw new Error(`Can't not find next user for index: ${nextWatchedIndex}`);
+    if (!currentUser) {
+      throw new Error(`Can't not find next user for index: ${currentUserIndex}`);
     }
 
-    const nextUserDetail = await fetchUserByIdGateway(nextUser.id);
+    dispatch(userActions.updateLoading({ isLoading: true }));
+    const currentUserDetail = await fetchUserByIdGateway(currentUser.id);
+    dispatch(userActions.updateLoading({ isLoading: false }));
 
-    dispatch(userActions.advanceNextUser({ currentUser: nextUserDetail }));
+    dispatch(userActions.advanceNextUser({ currentUser: currentUserDetail }));
+
+    if (shouldFetchNewUsers(userState) && page > 0) {
+      fetchNextUserPage({ limit, page })(dispatch, getState);
+    }
   } catch (error) {
     openAlertNoti(`An error occurred: ${error.message}`);
-  } 
-  // finally {
-  //   dispatch(userActions.updateLoading({ isLoading: false }));
-  // }
+  } finally {
+    dispatch(userActions.updateLoading({ isLoading: false }));
+  }
 }
 
 export const fetchNextUserPage = ({ limit, page }) => async (dispatch, getState) => {
@@ -74,6 +77,7 @@ export const fetchNextUserPage = ({ limit, page }) => async (dispatch, getState)
   const currentUsers = userState.data;
 
   try {
+    dispatch(userActions.updateLoading({ isLoading: true }));
     const newUsers = await fetchUsersGateway({ limit, page });
 
     const aggregatedUserData = currentUsers.concat(newUsers);
@@ -104,8 +108,9 @@ export const fetchNextUserPage = ({ limit, page }) => async (dispatch, getState)
       },
     }));
   } catch (error) {
-    openAlertNoti('An error occurred');
-    console.log(error);
+    openAlertNoti(`An error occurred: ${error.message}`);
+  } finally {
+    dispatch(userActions.updateLoading({ isLoading: false }));
   }
 }
 

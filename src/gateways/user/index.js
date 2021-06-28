@@ -29,6 +29,8 @@ export const fetchUserByIdGateway = async (userId) => {
 export const userPreferenceUpdateGateway = async ({ preferenceType, userId }) => {
   const apiUrl = `${process.env.REACT_APP_API_URL}/user/${preferenceType}`;
 
+  // To be implemented when back-end is done
+
   return;
   // const request = await axios.get(apiUrl, {
   //   headers: {

@@ -14,7 +14,7 @@ import { USER_PREFERENCE_TYPES } from '../../shared/constants';
 export const HomePage = () => {
   const dispatch = useAppDispatch();
 
-  const { isLoading, data } = useUsers();
+  const { data, isLoading } = useUsers();
   const currentUser = useCurrentUser();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const HomePage = () => {
   }, [data, dispatch]);
 
   return (
-    (!isLoading && currentUser)
+    (data.length && currentUser)
       ? <div className='home-page'>
           <div className='home-page__container'>
             <div className='home-page__container__intro'>
@@ -41,7 +41,9 @@ export const HomePage = () => {
               <div // Should not use arrow fn here for best performance, but just use it for now.
                 className='home-page__container__action-btns__pass'
                 onClick={
-                  () => dispatch(advanceNextUser({
+                  isLoading
+                    ? null
+                    : () => dispatch(advanceNextUser({
                     preferenceType: USER_PREFERENCE_TYPES.PASS,
                     userId: currentUser.id,
                   }))
@@ -53,7 +55,9 @@ export const HomePage = () => {
               <div
                 className='home-page__container__action-btns__like'
                 onClick={
-                  () => dispatch(advanceNextUser({
+                  isLoading
+                    ? null
+                    : () => dispatch(advanceNextUser({
                     preferenceType: USER_PREFERENCE_TYPES.LIKE,
                     userId: currentUser.id,
                   }))
