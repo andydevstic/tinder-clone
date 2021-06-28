@@ -1,6 +1,6 @@
 import './home.scss';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { HeartOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCurrentUser, useUsers } from '../../state/user/selectors';
@@ -14,14 +14,14 @@ import { USER_PREFERENCE_TYPES } from '../../shared/constants';
 export const HomePage = () => {
   const dispatch = useAppDispatch();
 
-  const { isLoading } = useUsers();
+  const { isLoading, data } = useUsers();
   const currentUser = useCurrentUser();
 
   useEffect(() => {
-    dispatch(advanceNextUser());
-  }, [dispatch]);
-
-  // const
+    if (!data || !data.length) {
+      dispatch(advanceNextUser());
+    }
+  }, [data, dispatch]);
 
   return (
     (!isLoading && currentUser)
@@ -42,7 +42,7 @@ export const HomePage = () => {
                 className='home-page__container__action-btns__pass'
                 onClick={
                   () => dispatch(advanceNextUser({
-                    preferenceType: USER_PREFERENCE_TYPES.LIKE,
+                    preferenceType: USER_PREFERENCE_TYPES.PASS,
                     userId: currentUser.id,
                   }))
                 }
@@ -54,7 +54,7 @@ export const HomePage = () => {
                 className='home-page__container__action-btns__like'
                 onClick={
                   () => dispatch(advanceNextUser({
-                    preferenceType: USER_PREFERENCE_TYPES.PASS,
+                    preferenceType: USER_PREFERENCE_TYPES.LIKE,
                     userId: currentUser.id,
                   }))
                 }

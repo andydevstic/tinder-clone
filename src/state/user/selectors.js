@@ -11,15 +11,8 @@ export const useUsers = () => {
 
 export const useCurrentUser = () => {
   return useSelector(state => state.user.currentUser);
-}
+  // const { watchedIndex, totalUsersFetched } = userState;
+  // const currentUserIndex = watchedIndex - totalUsersFetched;
 
-export const useUserIndexes = () => {
-  const userState = useSelector(state => state.user);
-  const watchedIndex = userState.watchedIndex;
-  const totalIndex = userState.totalIndex;
-
-  return {
-    watchedIndex,
-    totalIndex,
-  }
+  // return userState.data[currentUserIndex];
 }

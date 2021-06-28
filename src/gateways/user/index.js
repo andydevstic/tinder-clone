@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const fetchUsersGateway = async ({ limit, offset }) => {
+export const fetchUsersGateway = async ({ limit, page }) => {
   const apiUrl = `${process.env.REACT_APP_API_URL}/user`;
   const request = await axios.get(apiUrl, {
     headers: {
@@ -8,7 +8,7 @@ export const fetchUsersGateway = async ({ limit, offset }) => {
     },
     params: {
       limit,
-      offset,
+      page,
     },
   });
 
