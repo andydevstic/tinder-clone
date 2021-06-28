@@ -1,6 +1,7 @@
 import { userActions } from '.';
-import { fetchUsersGateway, userPreferenceUpdateGateway } from '../../gateways/user';
+import { fetchUsersGateway, userPreferenceUpdateGateway, fetchUserByIdGateway } from '../../gateways/user';
 import { MAX_USER_CACHE, USER_PREFETCH_LIMIT } from '../../shared/constants';
+import { openAlertNoti } from '../../shared/notification';
 
 function shouldFetchNewUsers(userState) {
   const { watchedIndex, data } = userState;
@@ -10,20 +11,47 @@ function shouldFetchNewUsers(userState) {
   return fetchedDataLength - watchedIndex <= USER_PREFETCH_LIMIT;
 }
 
-export const advanceNextUserThunk = (userPreferenceData) => async (dispatch, getState) => {
-  const appState = getState();
-  const userState = appState.user;
-  const currentUsers = userState.data;
+export const advanceNextUser = (userPreferenceData) => async (dispatch, getState) => {
+  let appState = getState();
+  let userState = appState.user;
+  const nextWatchedIndex = userState.watchedIndex + 1;
 
   if (userPreferenceData) {
     await userPreferenceUpdateGateway(userPreferenceData);
   }
 
-  if (!shouldFetchNewUsers(userState)) {
-    dispatch(userActions.advanceNextUser());
+  if (shouldFetchNewUsers(userState)) {
+    await fetchNextUserPage()(dispatch, getState);
+
+    appState = getState();
+    userState = appState.user;
+  }
+
+  const nextUser = userState.data[nextWatchedIndex];
+
+  if (!nextUser) {
+    openAlertNoti('An error occurred');
 
     return;
   }
+
+  const nextUserId = nextUser.id;
+  
+  const nextUserDetail = await fetchUserByIdGateway(nextUserId);
+
+  dispatch(userActions.advanceNextUser({ currentUser: nextUserDetail }));
+}
+
+export const fetchUserById = userId => async dispatch => {
+  const userDetail = await fetchUserByIdGateway(userId);
+
+  dispatch(userActions.updateCurrentUser({ currentUser: userDetail }));
+}
+
+export const fetchNextUserPage = () => async (dispatch, getState) => {
+  const appState = getState();
+  const userState = appState.user;
+  const currentUsers = userState.data;
 
   try {
     const { offset, limit } = userState.pagination;
@@ -41,7 +69,6 @@ export const advanceNextUserThunk = (userPreferenceData) => async (dispatch, get
     }
 
     dispatch(userActions.fetchUsers({ data: newUsers }));
-    dispatch(userActions.advanceNextUser());
   } finally {
     dispatch(userActions.updateLoading({ isLoading: false })); 
   }

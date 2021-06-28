@@ -8,6 +8,7 @@ const userSlice = createSlice({
       limit: 10,
       offset: 0,
     },
+    currentUser: null,
     watchedIndex: -1,
     totalIndex: 0,
     isLoading: false,
@@ -27,8 +28,9 @@ const userSlice = createSlice({
     updateLoading: (state, action) => {
       state.isLoading = action.payload.isLoading;
     },
-    advanceNextUser: state => {
+    advanceNextUser: (state, action) => {
       state.watchedIndex++;
+      state.currentUser = action.payload.currentUser;
     },
   },
 });

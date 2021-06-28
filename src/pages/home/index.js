@@ -1,25 +1,27 @@
 import './home.scss';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { HeartOutlined, CloseOutlined } from '@ant-design/icons';
-import { useUserIndexes, useUsersSelector } from '../../state/user/selectors';
+import { useCurrentUser, useUsers } from '../../state/user/selectors';
 import { useAppDispatch } from '../../state';
-import { advanceNextUserThunk } from '../../state/user/thunks';
+import { advanceNextUser } from '../../state/user/thunks';
 import { LoadingOutlined } from '@ant-design/icons';
+import { getUserAge } from '../../shared/utils';
 import { USER_PREFERENCE_TYPES } from '../../shared/constants';
 
-export const HomePage = () => {
-  const userData = useUsersSelector();
-  const { watchedIndex } = useUserIndexes();
-  const dispatch = useAppDispatch();
-  const { data, isLoading } = userData;
 
-  const currentUser = watchedIndex >= 0 && data[watchedIndex];
+export const HomePage = () => {
+  const dispatch = useAppDispatch();
+
+  const { isLoading } = useUsers();
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
-    dispatch(advanceNextUserThunk());
+    dispatch(advanceNextUser());
   }, [dispatch]);
+
+  // const
 
   return (
     (!isLoading && currentUser)
@@ -32,15 +34,14 @@ export const HomePage = () => {
               <img src={currentUser.picture} />
             </div>
             <div className='home-page__container__user-info'>
-              <h2>{currentUser.firstName} {currentUser.lastName}</h2>
-              <h2>{currentUser.dateOfBirth}</h2>
+              <h2>{currentUser.firstName} {currentUser.lastName}, {getUserAge(currentUser.dateOfBirth)}</h2>
             </div>
 
             <div className='home-page__container__action-btns'>
               <div // Should not use arrow fn here for best performance, but just use it for now.
                 className='home-page__container__action-btns__pass'
                 onClick={
-                  () => dispatch(advanceNextUserThunk({
+                  () => dispatch(advanceNextUser({
                     preferenceType: USER_PREFERENCE_TYPES.LIKE,
                     userId: currentUser.id,
                   }))
@@ -52,7 +53,7 @@ export const HomePage = () => {
               <div
                 className='home-page__container__action-btns__like'
                 onClick={
-                  () => dispatch(advanceNextUserThunk({
+                  () => dispatch(advanceNextUser({
                     preferenceType: USER_PREFERENCE_TYPES.PASS,
                     userId: currentUser.id,
                   }))

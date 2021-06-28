@@ -1,7 +1,11 @@
-export function shouldComponentDisplay(conditionFlag, component, replacementComponent = null) {
-  if (conditionFlag) {
-    return component;
+import dayjs from 'dayjs';
+
+export function getUserAge(userBirthday) {
+  const now = dayjs();
+
+  if (!userBirthday) {
+    return 'Unknown age';
   }
 
-  return replacementComponent;
+  return now.year() - dayjs(userBirthday).year();
 }
