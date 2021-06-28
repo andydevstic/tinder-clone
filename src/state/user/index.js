@@ -8,7 +8,7 @@ const userSlice = createSlice({
       limit: 10,
       offset: 0,
     },
-    watchedIndex: 0,
+    watchedIndex: -1,
     totalIndex: 0,
     isLoading: false,
   },

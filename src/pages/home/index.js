@@ -15,7 +15,7 @@ export const HomePage = () => {
   const dispatch = useAppDispatch();
   const { data, isLoading } = userData;
 
-  const currentUser = data[watchedIndex];
+  const currentUser = watchedIndex >= 0 && data[watchedIndex];
 
   useEffect(() => {
     dispatch(advanceNextUserThunk());
@@ -32,8 +32,8 @@ export const HomePage = () => {
               <img src={currentUser.picture} />
             </div>
             <div className='home-page__container__user-info'>
-              <h3>{currentUser.firstName} {currentUser.lastName}</h3>
-              <h3>{currentUser.dateOfBirth}</h3>
+              <h2>{currentUser.firstName} {currentUser.lastName}</h2>
+              <h2>{currentUser.dateOfBirth}</h2>
             </div>
 
             <div className='home-page__container__action-btns'>
