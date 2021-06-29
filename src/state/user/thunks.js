@@ -22,15 +22,18 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
     const { page, limit } = userState.pagination;
 
     if (userPreferenceData) {
-      await userHistoryUpdateGateway(userPreferenceData);
+      await userHistoryUpdateGateway({
+        ...userPreferenceData,
+        user: userState.currentUser,
+      });
 
       switch (userPreferenceData.preferenceType) {
         case USER_PREFERENCE_TYPES.LIKE:
-          dispatch(historyActions.pushLiked({ user: userPreferenceData.user }));
+          dispatch(historyActions.pushLiked({ user: userState.currentUser }));
           openSuccessMessage('What an awesome profile!');
           break;
         case USER_PREFERENCE_TYPES.PASS:
-          dispatch(historyActions.pushPassed({ user: userPreferenceData.user }));
+          dispatch(historyActions.pushPassed({ user: userState.currentUser }));
           openErrorMessage('Not my type');
           break;
         default:

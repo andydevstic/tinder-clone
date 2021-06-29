@@ -15,10 +15,12 @@ const historySlice = createSlice({
   },
   reducers: {
     updateHistory: (state, action) => {
-      const { data, pagination } = action.payload;
+      const { data, pagination, preferenceType } = action.payload;
 
       if (data && data.length) {
-        state.data = data.concat(state.data);
+        const updatedData = data.concat(state.data[preferenceType]);
+
+        state.data[preferenceType] = updatedData;
       }
 
       if (pagination) {
@@ -29,10 +31,20 @@ const historySlice = createSlice({
       state.isLoading = action.payload.isLoading;
     },
     pushLiked: (state, action) => {
-      state.data.liked = state.data.liked.concat([action.payload.liked]);
+      const likedUser = action.payload.user || [];
+      const slicedLikedUsers = state.data.liked.slice();
+
+      slicedLikedUsers.push(likedUser);
+
+      state.data.liked = slicedLikedUsers;
     },
     pushPassed: (state, action) => {
-      state.data.passed = state.data.passed.concat([action.payload.passed]);
+      const passedUser = action.payload.user || [];
+      const slicedPassedUsers = state.data.passed.slice();
+
+      slicedPassedUsers.push(passedUser);
+
+      state.data.passed = slicedPassedUsers;
     },
   },
 });

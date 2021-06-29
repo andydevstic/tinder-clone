@@ -28,6 +28,7 @@ export const fetchUserHistory = ({
 
     dispatch(historyActions.updateHistory({
       data: aggregatedUserData,
+      preferenceType,
       pagination: {
         limit,
         page,

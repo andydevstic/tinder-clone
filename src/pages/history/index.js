@@ -1,7 +1,7 @@
 import './history.scss';
 
 import { useEffect, useState } from 'react';
-import { LoadingOutlined, UpSquareOutlined } from '@ant-design/icons';
+import { LoadingOutlined, UpSquareOutlined, HeartOutlined, CloseOutlined, HomeOutlined } from '@ant-design/icons';
 
 import { useAppDispatch } from '../../state';
 import { HistoryCard } from '../../components/history-card';
@@ -11,6 +11,7 @@ import { getUserAge } from '../../shared/utils';
 
 import { historyActions } from '../../state/history';
 import { advanceNextHistoryPage } from '../../state/history/thunks';
+import { Link } from 'react-router-dom';
 
 // const LazyLoadDiv = (props) => {
 //   const { forwardedRef } = props;
@@ -35,7 +36,13 @@ export const HistoryPage = () => {
 
   useEffect(() => {
     const historyData = data[preferenceType];
-    console.log('data', data);
+    if (!historyData || !historyData.length) {
+      dispatch(advanceNextHistoryPage(preferenceType));
+    }
+  }, []);
+
+  useEffect(() => {
+    const historyData = data[preferenceType];
     setHistoryData(historyData);
   }, [preferenceType, dispatch, data]);
 
@@ -52,9 +59,8 @@ export const HistoryPage = () => {
                   onClick={() => advanceNextHistoryPage(preferenceType)}
                   className='history-page__container__load-more'
                 >
-                  <UpSquareOutlined style={{fontSize: '30px'}} />
+                  <UpSquareOutlined style={{fontSize: '40px'}} />
                 </div>
-
                 {
                   currentHistoryData && currentHistoryData.length
                     ? (
@@ -82,11 +88,35 @@ export const HistoryPage = () => {
 
         }
         <div className='history-page__container__filter-btns'>
+          <div
+            className='history-page__container__filter-btns__pass'
+            onClick={
+              isLoading
+                ? null
+                : () => setPreferenceType(USER_PREFERENCE_TYPES.PASS)
+            }
+          >
+            <CloseOutlined style={{fontSize: '30px'}} />
+          </div>
 
+          <div
+            className='history-page__container__filter-btns__like'
+            onClick={
+              isLoading
+                ? null
+                : () => setPreferenceType(USER_PREFERENCE_TYPES.LIKE)
+            }
+          >
+            <HeartOutlined style={{fontSize: '30px'}} />
+          </div>
         </div>
-        <div className='history-page__container__back-btn'>
-
-        </div>
+        <Link
+          className='history-page__container__back-btn'
+          to='/'
+          style={{color: 'black'}}
+        >
+          <HomeOutlined style={{fontSize: '30px'}} />
+        </Link>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ export const HistoryCard = (props) => {
   return (
     <div className='history-card'>
       <div className='history-card__picture'>
-        <img src={picture} />
+        <img src={picture} width='120px' height='120px' />
       </div>
 
       <div className='history-card__info'>
