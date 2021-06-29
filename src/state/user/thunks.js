@@ -22,10 +22,9 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
     const { page, limit } = userState.pagination;
 
     if (userPreferenceData) {
-      await userHistoryUpdateGateway({
-        ...userPreferenceData,
-        user: userState.currentUser,
-      });
+      const { preferenceType } = userPreferenceData;
+
+      await userHistoryUpdateGateway({ preferenceType, user: userState.currentUser });
 
       switch (userPreferenceData.preferenceType) {
         case USER_PREFERENCE_TYPES.LIKE:

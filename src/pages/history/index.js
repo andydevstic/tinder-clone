@@ -9,20 +9,8 @@ import { USER_PREFERENCE_TYPES } from '../../shared/constants';
 import { useUserHistory } from '../../state/history/selectors';
 import { getUserAge } from '../../shared/utils';
 
-import { historyActions } from '../../state/history';
 import { advanceNextHistoryPage } from '../../state/history/thunks';
 import { Link } from 'react-router-dom';
-
-// const LazyLoadDiv = (props) => {
-//   const { forwardedRef } = props;
-
-//   return (
-//     <div
-//       ref={forwardedRef}
-//       className='history-page__container__lazyload viewport-block'
-//     />
-//   )
-// }
 
 export const HistoryPage = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +27,7 @@ export const HistoryPage = () => {
     if (!historyData || !historyData.length) {
       dispatch(advanceNextHistoryPage(preferenceType));
     }
-  }, []);
+  }, [preferenceType]);
 
   useEffect(() => {
     const historyData = data[preferenceType];

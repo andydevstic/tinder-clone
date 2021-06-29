@@ -22,12 +22,8 @@ export const fetchUserHistoryGateway = ({ limit, page, preferenceType }) => {
         }
   
         const storageData = getHistoryLocalStorage(storagePath);
-        const totalStorageLength = storageData.length;
 
-        const endIndex = totalStorageLength - limit * page;
-        const startIndex = endIndex - limit;
-
-        resolve(storageData.slice(startIndex, endIndex));
+        resolve(storageData);
       } catch (error) {
         reject(error);
       }
