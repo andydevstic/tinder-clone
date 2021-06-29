@@ -8,6 +8,7 @@ import 'antd/dist/antd.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import store from './state';
 import { HomePage } from './pages/home';
+import { HistoryPage } from './pages/history';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -16,6 +17,9 @@ ReactDOM.render(
         <div className='app'>
           <Route path="/" exact={true}>
             <HomePage />
+          </Route>
+          <Route path="/history" exact={true}>
+            <HistoryPage />
           </Route>
         </div>
       </Switch>

@@ -2,13 +2,14 @@ import './home.scss';
 
 import { useEffect } from 'react';
 
-import { HeartOutlined, CloseOutlined } from '@ant-design/icons';
+import { HeartOutlined, CloseOutlined, HistoryOutlined } from '@ant-design/icons';
 import { useCurrentUser, useUsers } from '../../state/user/selectors';
 import { useAppDispatch } from '../../state';
 import { advanceNextUser } from '../../state/user/thunks';
 import { LoadingOutlined } from '@ant-design/icons';
 import { getUserAge } from '../../shared/utils';
 import { USER_PREFERENCE_TYPES } from '../../shared/constants';
+import { Link } from 'react-router-dom';
 
 
 export const HomePage = () => {
@@ -45,7 +46,6 @@ export const HomePage = () => {
                     ? null
                     : () => dispatch(advanceNextUser({
                     preferenceType: USER_PREFERENCE_TYPES.PASS,
-                    userId: currentUser.id,
                   }))
                 }
               >
@@ -59,13 +59,19 @@ export const HomePage = () => {
                     ? null
                     : () => dispatch(advanceNextUser({
                     preferenceType: USER_PREFERENCE_TYPES.LIKE,
-                    userId: currentUser.id,
                   }))
                 }
               >
                 <HeartOutlined style={{fontSize: '30px'}} />
               </div>
             </div>
+            <Link
+              className='home-page__container__history-btn'
+              to='/history'
+              style={{color: 'black'}}
+            >
+              <HistoryOutlined style={{fontSize: '30px'}} />
+            </Link>
           </div>
         </div>
       : <div className='home-page'>
