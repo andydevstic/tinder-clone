@@ -7,7 +7,8 @@ import { openAlertNoti } from '../../shared/notification';
 export const advanceNextHistoryPage = (preferenceType) => async (dispatch, getState) => {
   const appState = getState();
   const historyState = appState.history;
-  const { page, limit } = historyState.pagination;
+
+  const { page, limit } = historyState.pagination[preferenceType];
 
   await fetchUserHistory({ limit, page: page + 1, preferenceType })(dispatch, getState);
 }
