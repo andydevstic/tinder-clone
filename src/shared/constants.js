@@ -4,6 +4,6 @@ export const USER_PREFETCH_LIMIT = 5;
 export const MESSAGE_DURATION = 0.75;
 
 export const USER_PREFERENCE_TYPES = {
-  LIKE: 'like',
-  PASS: 'pass',
+  LIKE: 'liked',
+  PASS: 'passed',
 };

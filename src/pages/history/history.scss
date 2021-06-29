@@ -1,6 +1,6 @@
 
 
-.home-page {
+.history-page {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -20,53 +20,53 @@
 
     &__loading {
       width: 100%;
-      height: 100%;
+      height: 88%;
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
     }
 
-    &__intro {
+    &__load-more {
       width: 100%;
       height: 11%;
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      background-color: black;
-
-      h1 {
-        color: white;
-      }
-    }
-
-    &__user-picture {
-      width: 100%;
-      height: 65%;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    &__user-info {
-      width: 100%;
-      height: 12%;
       padding: 10px;
 
-      display: flex;
-      flex-direction: row;
+      transition: background-color 0.3s;
 
-      align-items: center;
-
-      h2 {
-        font-weight: bolder;
+      &:hover {
+        background-color: lightskyblue;
       }
     }
-    
-    &__action-btns {
+
+    &__list {
+      width: 100%;
+      height: 77%;
+      padding: 10px;
+
+      overflow-y: auto;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      &--no-data {
+        width: 100%;
+        height: 77%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    &__filter-btns {
       width: 100%;
       height: 6%;
       display: flex;
@@ -105,7 +105,7 @@
       }
     }
 
-    &__history-btn {
+    &__back-btn {
       width: 100%;
       height: 6%;
 

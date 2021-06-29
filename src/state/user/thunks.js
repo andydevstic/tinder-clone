@@ -1,8 +1,10 @@
 import { userActions } from '.';
-import { fetchUsersGateway, userPreferenceUpdateGateway, fetchUserByIdGateway } from '../../gateways/user';
+import { userHistoryUpdateGateway } from '../../gateways/history';
+import { fetchUsersGateway, fetchUserByIdGateway } from '../../gateways/user';
 import { MAX_USER_CACHE, RESET_USER_CACHE, USER_PREFERENCE_TYPES, USER_PREFETCH_LIMIT } from '../../shared/constants';
 import { openErrorMessage, openSuccessMessage } from '../../shared/message';
 import { openAlertNoti } from '../../shared/notification';
+import { historyActions } from '../history';
 
 function shouldFetchNewUsers(userState) {
   const { watchedIndex, data, totalUsersFetched } = userState;
@@ -17,22 +19,21 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
     let appState = getState();
     let userState = appState.user;
 
-    if (userState.isLoading) {
-      openErrorMessage('You are swipping too fast!');
-  
-      return;
-    }
-
     const { page, limit } = userState.pagination;
 
     if (userPreferenceData) {
-      await userPreferenceUpdateGateway(userPreferenceData);
+      await userHistoryUpdateGateway({
+        ...userPreferenceData,
+        user: userState.currentUser,
+      });
 
       switch (userPreferenceData.preferenceType) {
         case USER_PREFERENCE_TYPES.LIKE:
+          dispatch(historyActions.pushLiked({ user: userState.currentUser }));
           openSuccessMessage('What an awesome profile!');
           break;
         case USER_PREFERENCE_TYPES.PASS:
+          dispatch(historyActions.pushPassed({ user: userState.currentUser }));
           openErrorMessage('Not my type');
           break;
         default:
