@@ -5,7 +5,7 @@ import { USER_PREFERENCE_TYPES } from "../../shared/constants";
 const LIKED_STORAGE_PATH = 'storage.history.liked';
 const PASSED_STORAGE_PATH = 'storage.history.passed';
 
-export const fetchUserHistoryGateway = ({ limit, page, preferenceType }) => {
+export const fetchUserHistoryGateway = ({ preferenceType }) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       try {
@@ -58,20 +58,6 @@ export const userHistoryUpdateGateway = ({ preferenceType, user }) => {
       }
     }, 300);
   });
-}
-
-function realUserHistoryUpdateGateway() {
-  // To be implemented when back-end is done
-  // const apiUrl = `${process.env.REACT_APP_API_URL}/user/${preferenceType}`;
-  // const request = await axios.get(apiUrl, {
-  //   headers: {
-  //     'app-id': process.env.REACT_APP_API_ID, // Should not store like this. Only for testing
-  //   },
-  //   params: {
-  //     limit,
-  //     offset,
-  //   },
-  // });
 }
 
 function setHistoryLocalStorage(path, data) {

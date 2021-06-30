@@ -1,6 +1,6 @@
 import './history.scss';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LoadingOutlined, UpSquareOutlined, HeartOutlined, CloseOutlined, HomeOutlined } from '@ant-design/icons';
 
 import { useAppDispatch } from '../../state';
