@@ -26,6 +26,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint .",
+    "prepare": "husky install",
     "lint::fix": "eslint --fix .",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -51,10 +52,5 @@
   "devDependencies": {
     "eslint": "^7.29.0",
     "eslint-plugin-react": "^7.24.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint"
-    }
   }
 }
