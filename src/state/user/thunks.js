@@ -19,6 +19,10 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
     let appState = getState();
     let userState = appState.user;
 
+    if (userState.isLoading) {
+      return;
+    }
+
     const { page, limit } = userState.pagination;
 
     if (userPreferenceData) {
