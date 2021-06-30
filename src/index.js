@@ -25,6 +25,7 @@ ReactDOM.render(
       </Switch>
     </Router>
   </Provider>,
+  // eslint-disable-next-line
   document.getElementById('root')
 );
 

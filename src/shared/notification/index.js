@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { notification } from "antd";
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 

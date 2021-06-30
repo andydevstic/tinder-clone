@@ -1,5 +1,7 @@
 import './history-card.scss';
 
+import React from 'react';
+
 export const HistoryCard = (props) => {
   const { userData } = props;
   const { picture, fullName, age } = userData;

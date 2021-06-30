@@ -1,6 +1,6 @@
 import './home.scss';
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { HeartOutlined, CloseOutlined, HistoryOutlined } from '@ant-design/icons';
 import { useCurrentUser, useUsers } from '../../state/user/selectors';
