@@ -35,7 +35,7 @@ export const HomePage = () => {
               <img src={currentUser.picture} />
             </div>
             <div className='home-page__container__user-info'>
-              <h2>{currentUser.firstName} {currentUser.lastName}, {getUserAge(currentUser.dateOfBirth)}</h2>
+              <h2>{currentUser.fullName}, {getUserAge(currentUser.dateOfBirth)}</h2>
             </div>
 
             <div className='home-page__container__action-btns'>
