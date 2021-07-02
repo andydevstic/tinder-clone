@@ -25,7 +25,9 @@ export const fetchUserHistory = ({
   dispatch(historyActions.updateLoading({ isLoading: true }));
   try {
     const fetchedHistory = await fetchUserHistoryGateway({ limit, page, preferenceType });
-    const aggregatedUserData = fetchedHistory.concat(currentHistoryData);
+    const reversedHistory = fetchedHistory.reverse();
+
+    const aggregatedUserData = reversedHistory.concat(currentHistoryData);
 
     dispatch(historyActions.updateHistory({
       data: aggregatedUserData,
