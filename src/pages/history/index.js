@@ -20,11 +20,12 @@ export const HistoryPage = () => {
   const {
     isLoading,
     data,
+    pagination,
   } = useUserHistory();
 
   useEffect(() => {
-    const historyData = data[preferenceType];
-    if (!historyData || !historyData.length) {
+    const preferencePagination = pagination[preferenceType];
+    if (!preferencePagination.page >= 0 && !data[preferenceType].length) {
       dispatch(advanceNextHistoryPage(preferenceType));
     }
   }, [preferenceType]);
@@ -44,7 +45,7 @@ export const HistoryPage = () => {
               </div>
             : <>
                 <div
-                  onClick={() => advanceNextHistoryPage(preferenceType)}
+                  onClick={() => dispatch(advanceNextHistoryPage(preferenceType))}
                   className='history-page__container__load-more'
                 >
                   <UpSquareOutlined style={{fontSize: '40px'}} />
@@ -54,8 +55,7 @@ export const HistoryPage = () => {
                     ? (
                         <div className='history-page__container__list'>
                         {
-                          currentHistoryData.map(({ id, firstName, lastName, picture, dateOfBirth }) => {
-                            const fullName = `${firstName} ${lastName}`;
+                          currentHistoryData.map(({ id, fullName, picture, dateOfBirth }) => {
                             const age = getUserAge(dateOfBirth);
 
                             return (

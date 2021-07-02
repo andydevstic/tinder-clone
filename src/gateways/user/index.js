@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 export const fetchUsersGateway = async ({ limit, page }) => {
-  const apiUrl = `${process.env.REACT_APP_API_URL}/user`;
+  const apiUrl = `${process.env.REACT_APP_API_URL}/users`;
   const request = await axios.get(apiUrl, {
     headers: {
-      'app-id': process.env.REACT_APP_API_ID, // Should not store like this. Only for testing
+      'User-Id': process.env.REACT_APP_USER_ID,
     },
     params: {
       limit,
@@ -16,10 +16,10 @@ export const fetchUsersGateway = async ({ limit, page }) => {
 }
 
 export const fetchUserByIdGateway = async (userId) => {
-  const apiUrl = `${process.env.REACT_APP_API_URL}/user/${userId}`;
+  const apiUrl = `${process.env.REACT_APP_API_URL}/users/${userId}`;
   const request = await axios.get(apiUrl, {
     headers: {
-      'app-id': process.env.REACT_APP_API_ID, // Should not store like this. Only for testing
+      'User-Id': process.env.REACT_APP_USER_ID,
     },
   });
 

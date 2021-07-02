@@ -24,9 +24,7 @@ const historySlice = createSlice({
       const { data, pagination, preferenceType } = action.payload;
 
       if (data && data.length) {
-        const updatedData = data.concat(state.data[preferenceType]);
-
-        state.data[preferenceType] = updatedData;
+        state.data[preferenceType] = data;
       }
 
       if (pagination) {

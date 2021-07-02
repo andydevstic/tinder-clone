@@ -1,72 +1,41 @@
 // import axios from 'axios';
 
+import axios from "axios";
 import { USER_PREFERENCE_TYPES } from "../../shared/constants";
 
-const LIKED_STORAGE_PATH = 'storage.history.liked';
-const PASSED_STORAGE_PATH = 'storage.history.passed';
+export const fetchUserHistoryGateway = async ({ preferenceType, limit, page }) => {
+  const apiUrl = `${process.env.REACT_APP_API_URL}/users/history`;
 
-export const fetchUserHistoryGateway = ({ preferenceType }) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      try {
-        let storagePath;
-        switch (preferenceType) {
-          case USER_PREFERENCE_TYPES.LIKE:
-            storagePath = LIKED_STORAGE_PATH;
-            break;
-          case USER_PREFERENCE_TYPES.PASS:
-            storagePath = PASSED_STORAGE_PATH;
-            break;
-          default:
-            throw new Error('User preference not exist');
-        }
-  
-        const storageData = getHistoryLocalStorage(storagePath);
-
-        resolve(storageData);
-      } catch (error) {
-        reject(error);
+  const response = await axios.get(
+    apiUrl,
+    {
+      headers: {
+        'User-Id': process.env.REACT_APP_USER_ID,
+      },
+      params: {
+        actionId: preferenceType === USER_PREFERENCE_TYPES.LIKE ? 1 : 2,
+        limit,
+        page,
       }
-    }, 200);
-  });
+    },
+  );
+
+  return response.data.data;
 }
 
-export const userHistoryUpdateGateway = ({ preferenceType, user }) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      try {
-        let storagePath;
-        switch (preferenceType) {
-          case USER_PREFERENCE_TYPES.LIKE:
-            storagePath = LIKED_STORAGE_PATH;
-            break;
-          case USER_PREFERENCE_TYPES.PASS:
-            storagePath = PASSED_STORAGE_PATH;
-            break;
-          default:
-            throw new Error('User preference not exist');
-        }
-  
-        const storageData = getHistoryLocalStorage(storagePath);
-        storageData.push(user);
-  
-        setHistoryLocalStorage(storagePath, storageData);
+export const userHistoryUpdateGateway = async ({ preferenceType, user }) => {
+  const apiUrl = `${process.env.REACT_APP_API_URL}/users/action`;
 
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    }, 300);
-  });
-}
-
-function setHistoryLocalStorage(path, data) {
-  localStorage.setItem(path, JSON.stringify(data));
-}
-
-function getHistoryLocalStorage(path) {
-  const storageDataInString = localStorage.getItem(path);
-  return storageDataInString
-    ? JSON.parse(storageDataInString)
-    : [];
+  return axios.post(
+    apiUrl,
+    {
+      actionId: preferenceType === USER_PREFERENCE_TYPES.LIKE ? 1 : 2,
+      targetUserIndex: user.userIndex,
+    },
+    {
+      headers: {
+        'User-Id': process.env.REACT_APP_USER_ID,
+      },
+    },
+  );
 }

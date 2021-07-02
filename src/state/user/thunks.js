@@ -1,6 +1,6 @@
 import { userActions } from '.';
 import { userHistoryUpdateGateway } from '../../gateways/history';
-import { fetchUsersGateway, fetchUserByIdGateway } from '../../gateways/user';
+import { fetchUsersGateway } from '../../gateways/user';
 import { MAX_USER_CACHE, RESET_USER_CACHE, USER_PREFERENCE_TYPES, USER_PREFETCH_LIMIT } from '../../shared/constants';
 import { openErrorMessage, openSuccessMessage } from '../../shared/message';
 import { openAlertNoti } from '../../shared/notification';
@@ -59,11 +59,7 @@ export const advanceNextUser = (userPreferenceData) => async (dispatch, getState
       throw new Error(`Can't not find next user for index: ${currentUserIndex}`);
     }
 
-    dispatch(userActions.updateLoading({ isLoading: true }));
-    const currentUserDetail = await fetchUserByIdGateway(currentUser.id);
-    dispatch(userActions.updateLoading({ isLoading: false }));
-
-    dispatch(userActions.advanceNextUser({ currentUser: currentUserDetail }));
+    dispatch(userActions.advanceNextUser({ currentUser }));
 
     // Fetch next page in background
     if (shouldFetchNewUsers(userState) && page > 0) {
