@@ -1,19 +1,16 @@
 # Introduction
 
-This is a Tinder Clone project currently at version 1.0 (without backend integrated).
+This is a Tinder Clone project currently at version 2.0 (with backend integrated).
 
 ## Features
-  . Like/pass a user
-  . View history of liked/passed users.
-  . Usage of local storage to keep the liked/passed history persistent between reloads.
-  . Performance optimization: Prevent race-condition when user swipes too fast, and limit the number of users cached in the memory during pagination.
+  - Better performance compared to version 1.0 thanks to own backend integration
+  - Allow browsing history pagination.
+  - Ensure user do not view liked/passed users.
 
 ## To Improve
 
-During phase 2, the real backend will be integrated with following features/enhancements:
-  . Better runtime speed and UX since fetching user's general info and age can be merged into 1 API only.
-  . With usage of database, the pagination of browsing history will be production-like and user's interacted people will be recorded to prevent displaying the same people twice.
-  . View matched pairs.
+  - Open a notification if the user you've just liked also liked you.
+  - Display a sign when browsing history to indicate that person and you are a matched pair.
 
 # App Bootstrap
 
